@@ -1,1 +1,1 @@
-Run npm I first
+Run npm i first
