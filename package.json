@@ -4,7 +4,6 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "seed": "seeder.js",
     "start": "app.js",
     "run": "node $NODE_DEBUG_OPTION app.js",
     "test": "jest"
