@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const logger = require('./utils/logger');
+
 mongoose.Promise = Promise;
 
 const express = require('express')
@@ -7,13 +8,23 @@ const app = express()
 const dotenv = require('dotenv');
 dotenv.config();
 const config = require('config');
-mongoose.connect('mongodb://' + config.get('mongodb.address') + '/' + config.get('mongodb.dbname'), { useNewUrlParser: true, useUnifiedTopology: true });
-require('./utils/initializer').init()
+const storeRouter = require('./routes/storesRouter')
 
-app.use('/api', require('./routes/stores'));
+//connect top the database
+const db = mongoose.connect('mongodb://' + config.get('mongodb.address') + '/' + config.get('mongodb.dbname'),
+ { useNewUrlParser: true,
+   useUnifiedTopology: true 
+  });
+
+require ('./utils/initializer').init()
+
+//middlewares
+app.use(express.json())
+
+app.use('/api', storeRouter);
 
 // Start the server
-app.listen(config.get('port'));
+const createServer = app.listen(config.get('port'));
 logger.info('API initialized on port ' + config.get('port'));
 
-module.exports = app
+module.exports = {app,db,createServer}
